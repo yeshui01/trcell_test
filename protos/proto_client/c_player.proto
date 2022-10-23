@@ -1,0 +1,41 @@
+syntax = "proto3";
+package pbclient;
+option go_package = "trcell/pkg/pb/pbclient";
+
+message RoleInfo 
+{
+    int64 RoleID = 1;
+    int32 Level = 2;
+    string Nickname = 3;
+    int32 Icon = 4;
+}
+
+// ECMsgPlayerLoginGame = 1 // 登录游戏
+message ECMsgPlayerLoginGameReq
+{
+    string Token = 1;
+    int64 RoleID = 2;
+}
+message ECMsgPlayerLoginGameRsp
+{
+    RoleInfo RoleData = 1;
+}
+
+// ECMsgPlayerKeepHeart = 2 // 心跳
+message ECMsgPlayerKeepHeartReq
+{
+}
+message ECMsgPlayerKeepHeartRsp
+{
+}
+
+// ECMsgPlayerCreateRole    = 3 // 创角
+message ECMsgPlayerCreateRoleReq
+{
+    string Nickname = 1;
+    string Token = 2;   // 账号登录时拿到的Token
+}
+message ECMsgPlayerCreateRoleRsp
+{
+    RoleInfo RoleData = 1;
+}

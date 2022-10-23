@@ -1,0 +1,75 @@
+zoneID: 1
+accountCfgs:
+    - listenAddr: ":15000"
+      logLevel: 5
+      accountDb:
+          user: "tdev"
+          host: "localhost"
+          port: 3306
+          pswd: "123456"
+          dbName: "cell_account"
+
+# cellroot
+cellRootCfgs:
+    - listenAddr: ":16021"
+      logLevel: 5
+      #logPath: "./logs"
+
+# celldata
+cellDataCfgs:
+    - listenAddr: ":16022"
+      logLevel: 5
+      #logPath: "./logs"
+      gameDb:
+          user: "tdev"
+          host: "localhost"
+          port: 3306
+          pswd: "123456"
+          dbName: "cell_game"
+
+# cellcenter
+cellCenterCfgs:
+    - listenAddr: ":16024"
+      logLevel: 5
+      #logPath: "./logs"
+
+# celllogic
+cellLogicCfgs:
+    - listenAddr: ":16026"
+      logLevel: 5
+      #logPath: "./logs"
+      csvPath: "./csv"
+
+# cellgame
+cellGameCfgs:
+    - listenAddr: ":16030"
+      logLevel: 5
+      #logPath: "./logs"
+      csvPath: "./csv"
+
+# celllog
+celllogCfgs:
+    - listenAddr: ":16032"
+      logLevel: 5
+      #logPath: "./logs"
+      csvPath: "./csv"
+
+# cellview
+cellViewCfgs:
+    - listenAddr: ":16034"
+      logLevel: 5
+      #logPath: "./logs"
+      csvPath: "./csv"
+
+# cellgate
+cellGateCfgs:
+    - listenAddr: ":16036"
+      logLevel: 5
+      tcpListenAddr: ":7200"
+      #logPath: "./logs"
+    # - listenAddr: ":16037"
+    #   logLevel: 5
+    #   tcpListenAddr: "localhost:7200"
+    #   #logPath: "./logs"
+
+  

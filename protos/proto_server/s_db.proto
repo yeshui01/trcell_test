@@ -1,0 +1,21 @@
+syntax = "proto3";
+package pbserver;
+option go_package = "./pbserver";
+
+// 表数据
+message DbTableData
+{
+    int32 TableID = 1;  // 表id
+    bytes Data = 2;     // 数据 tbobj对象
+}
+
+// 表数据列表
+message DbTableListItem
+{
+    bytes TbData = 1;   // 数据 单条 tbobj对象
+}
+message DbTableDataList
+{
+    int32 TableID = 1;  // 表id
+    repeated DbTableListItem DataList = 2;
+}

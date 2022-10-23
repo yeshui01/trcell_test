@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+package pbserver;
+import "proto_client/c_player.proto";
+import "s_db.proto";
+import "s_common.proto";
+option go_package = "./pbserver";
+
+
+// 角色数据
+message GameRoleData
+{
+    repeated DbTableData RoleTables = 1;    // 角色相关的表 
+}
+
+// 创角数据
+message CreateRoleInfo
+{
+    string Account = 1;
+    string CchId = 2;
+    int32 Level = 3;
+    int64 UserID = 4;
+}
+// ESMsgPlayerLoadRole = 1 // 加载角色数据
+message ESMsgPlayerLoadRoleReq
+{
+    int64 RoleID = 1;
+    bool IsLogin = 2;    // 是否登录加载
+    int64 UserID = 3;
+    string UserName = 4;
+    // CreateRoleInfo CreateParam = 5; // 创角参数
+}
+message ESMsgPlayerLoadRoleRep
+{
+    GameRoleData RoleDetailData = 1;    // 角色详细数据
+    int64 RoleID = 2;
+}
+
+// ESMsgPlayerSaveRole = 2 // 保存角色数据
+message ESMsgPlayerSaveRoleReq
+{
+    int64 RoleID = 1;
+    repeated DbTableData RoleTables = 2;    // 角色要保存的相关的表
+}
+
+message ESMsgPlayerSaveRoleRep
+{
+
+}
+
+// ESMsgPlayerLoginGame = 3 // 登录游戏
+message ESMsgPlayerLoginGameReq
+{
+    int64 UserID = 1;       // 账号id
+    string Account = 2;     // 账号
+	string CchId = 3;       // 渠道
+    ServerNodeInfo GateInfo = 4;   // 网关信息
+    int64 RoleID = 5;              // 角色id
+}
+
+message ESMsgPlayerLoginGameRep
+{
+    pbclient.RoleInfo RoleData = 1;
+    ServerNodeInfo LogicInfo = 2;   // 网关信息
+    ServerNodeInfo DataInfo = 3;    // data信息
+}
+
+// ESMsgPlayerDisconnect = 4 // 玩家连接断开
+message ESMsgPlayerDisconnectReq
+{
+    int64 RoleID = 1;
+    int32 Reason = 2;   // 断开原因
+}
+// ESMsgPlayerDisconnect = 4 // 玩家连接断开
+message ESMsgPlayerDisconnectRep
+{
+}
+
+// ESMsgPlayerKickOut    = 5 // 踢掉玩家
+message ESMsgPlayerKickOutReq
+{
+    int64 RoleID = 1;
+    int32 Reason = 2;
+}
+message ESMsgPlayerKickOutRep
+{   
+}
+
+// ESMsgPlayerCreateRole = 6 // 玩家创角
+message ESMsgPlayerCreateRoleReq
+{
+    int64 UserID = 1;
+    string UserName = 2;            // 账号名字
+    string Nickname = 3;            // 角色昵称
+    ServerNodeInfo GateInfo = 4;    // 网关信息
+}
+
+message ESMsgPlayerCreateRoleRep
+{
+    pbclient.RoleInfo RoleData = 1;       // 客户端角色数据
+    GameRoleData RoleDetail = 2;          // 服务器角色详情数据
+    ServerNodeInfo LogicInfo = 3;         // 服务器信息
+    ServerNodeInfo DataInfo = 4;          // 服务器信息
+}

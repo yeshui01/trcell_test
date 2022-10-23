@@ -1,0 +1,28 @@
+syntax = "proto3";
+package pbrpc;
+option go_package = "./pbrpc";
+
+
+// echo测试
+message EchoReq {
+    string sendText = 1;
+}
+message EchoRep {
+    string sendText = 1;
+}
+
+// 生成uid
+message GenUIDReq
+{
+    int32 Num = 1;
+}
+message GenUIDRep
+{
+    repeated int64 UIDs = 1;
+}
+
+
+service GlobalData {
+    rpc EchoTest(EchoReq) returns (EchoRep) {}
+    rpc GenUid(GenUIDReq) returns (GenUIDRep) {}
+}

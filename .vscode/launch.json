@@ -1,0 +1,184 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "account",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/account/main.go",
+            "args":[
+                "--configPath=${workspaceFolder}/config_files",
+                "--index=0"
+            ]
+        },
+        {
+            "name": "cellserv_gate",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/cellserv_gate/main.go",
+            "args":[
+                "--configPath=${workspaceFolder}/config_files",
+                "--index=0"
+            ]
+        },
+        {
+            "name": "cellserv_root",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/cellserv_root/main.go",
+            "args":[
+                "--configPath=${workspaceFolder}/config_files",
+                "--index=0"
+            ]
+        },
+        {
+            "name": "cellserv_data",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/cellserv_data/main.go",
+            "args":[
+                "--configPath=${workspaceFolder}/config_files",
+                "--index=0"
+            ]
+        },
+        {
+            "name": "cellserv_center",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/cellserv_center/main.go",
+            "args":[
+                "--configPath=${workspaceFolder}/config_files",
+                "--index=0"
+            ]
+        },
+        {
+            "name": "cellserv_game",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/cellserv_game/main.go",
+            "args":[
+                "--configPath=${workspaceFolder}/config_files",
+                "--index=0"
+            ]
+        },
+        {
+            "name": "cellserv_logic",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/cellserv_logic/main.go",
+            "args":[
+                "--configPath=${workspaceFolder}/config_files",
+                "--index=0"
+            ]
+        },
+        {
+            "name": "cellserv_view",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/cellserv_view/main.go",
+            "args":[
+                "--configPath=${workspaceFolder}/config_files",
+                "--index=0"
+            ]
+        },
+        {
+            "name": "cellserv_log",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/cellserv_log/main.go",
+            "args":[
+                "--configPath=${workspaceFolder}/config_files",
+                "--index=0"
+            ]
+        },
+        {
+            "name": "cellserv_social",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/cellserv_social/main.go",
+            "args":[
+                "--configPath=${workspaceFolder}/config_files",
+                "--index=0"
+            ]
+        },
+        {
+            "name": "csv_tools",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/csvtools/main.go",
+            "args":[
+            ]
+        },
+        {
+            "name": "cellserv_global",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/cellserv_global/main.go",
+            "args":[
+                "--configPath=${workspaceFolder}/config_files",
+            ]
+        },
+        {
+            "name": "cellserv_trans",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/cellserv_trans/main.go",
+            "args":[
+                "--configPath=${workspaceFolder}/config_files",
+            ]
+        },
+        {
+            "name": "cell_robot",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/cell_robot/main.go",
+            "args":[
+                "--hostAddr=localhost:15000",
+                "--nameId=1",
+                "--robotNum=1"
+            ]
+        },
+        {
+            "name": "testapp_jobworker",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/testapp/testworker/main.go",
+            "args":[
+            ]
+        },
+        {
+            "name": "testapp_mongodb",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/testapp/testmongodb/main.go",
+            "args":[
+            ]
+        }
+    ],
+    "compounds": [
+        {
+          "name": "cellservers",
+          "configurations": ["cellserv_root","cellserv_data", "cellserv_log","cellserv_view","cellserv_center", "cellserv_game","cellserv_logic", "cellserv_gate"]
+          //"preLaunchTask": "build"
+        }
+      ]
+}

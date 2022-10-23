@@ -1,0 +1,16 @@
+accountCfgs:
+  - listenAddr: "localhost:15000"
+    logLevel: 5
+    #logPath: "./logs"
+#accountLocalDB:
+  #dbFile: "E:\\tyh_work_card\\server_project\\roomcell\\bin\\dbdata\\cellroom.db"
+  #dbFile: "F:\\work_home\\projects\\roomcell\\bin\\dbdata\\cellroom.db"
+accountDb:
+  user: "tdev"
+  host: "localhost"
+  port: 3306
+  pswd: "123456"
+  dbName: "cell_account"
+
+zoneID: 1
+  

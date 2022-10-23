@@ -1,0 +1,12 @@
+syntax = "proto3";
+package pbclient;
+option go_package = "trcell/pkg/pb/pbclient";
+
+// ECMsgClassCommon = 1 // 通用类别
+message ECMsgBasePushErrorOptNotify
+{
+    int32 ErrCode = 1;                  // 错误码
+    repeated string ErrParams = 2;      // 错误码参数列表(某些错误提示需要特定参数)
+    int32 MsgClass = 3;                 // 对应的消息大类型
+    int32 MsgType = 4;                  // 对应的消息小类型
+}
