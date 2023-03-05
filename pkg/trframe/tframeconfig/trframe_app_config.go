@@ -118,10 +118,13 @@ type CellTransCfg struct {
 	LogLevel   int32  `yaml:"logLevel"`
 	ListenMode string `yaml:"listenMode"`
 	LogPath    string `yaml:"logPath"`
+	ZoneID     int32  `yaml:"zoneID"`    // 非trans节点指定目标连连节点时使用
+	NodeIndex  int32  `yaml:"nodeIndex"` // 非trans节点指定目标连连节点时使用
 }
 type FrameConfig struct {
-	AccountCfgs []*AccountCfg `yaml:"accountCfgs"`
-	ZoneID      int32         `yaml:"zoneID"`
+	AccountCfgs  []*AccountCfg `yaml:"accountCfgs"`
+	ZoneID       int32         `yaml:"zoneID"`
+	ConnectTrans bool          `yaml:"connectTrans"`
 	//
 	CellRootCfgs   []*CellRootCfg   `yaml:"cellRootCfgs"`
 	CellGateCfgs   []*CellGateCfg   `yaml:"cellGateCfgs"`

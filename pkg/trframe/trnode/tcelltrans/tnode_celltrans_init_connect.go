@@ -21,7 +21,7 @@ func (frameNode *FrameNodeCellTrans) InitConnectServer() bool {
 	// 			NodeDes:   fmt.Sprintf("%d_ETRNodeTypeCellCenter%d", frameNode.tframeObj.GetFrameConfig().ZoneID, frameNode.nodeIndex),
 	// 		}
 	// 		cb := func(okCode int32, msgData []byte, env *iframe.TRRemoteMsgEnv) {
-	// 			loghlp.Infof("center register to cellroot callback suss:%d", okCode)
+	// 			loghlp.Infof("center register to cellroot callback succ:%d", okCode)
 	// 		}
 	// 		frameNode.tframeObj.ForwardMessage(
 	// 			protocol.EMsgClassFrame,

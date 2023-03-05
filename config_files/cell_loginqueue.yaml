@@ -1,0 +1,8 @@
+# globalDb:
+#   user: "tdev"
+#   host: "localhost"
+#   port: 3306
+#   pswd: "123456"
+#   dbName: "cell_global"
+rpcAddr: "localhost:50081"
+zoneID: 1

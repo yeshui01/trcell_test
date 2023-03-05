@@ -32,7 +32,7 @@ func (frameNode *FrameNodeCellGate) InitConnectServer() bool {
 				NodeDes:   fmt.Sprintf("%d_ETRNodeTypeCellGate%d", frameNode.tframeObj.GetFrameConfig().ZoneID, frameNode.nodeIndex),
 			}
 			cb := func(okCode int32, msgData []byte, env *iframe.TRRemoteMsgEnv) {
-				loghlp.Infof("gate register to rootserver callback suss:%d", okCode)
+				loghlp.Infof("gate register to rootserver callback succ:%d", okCode)
 			}
 			frameNode.tframeObj.ForwardMessage(
 				protocol.EMsgClassFrame,
@@ -52,7 +52,7 @@ func (frameNode *FrameNodeCellGate) InitConnectServer() bool {
 		userData := &iframe.SessionUserData{
 			DataType:       iframe.ESessionDataTypeNetInfo,
 			NodeType:       trnode.ETRNodeTypeCellRoot,
-			NodeIndex:      frameNode.nodeIndex,
+			NodeIndex:      int32(idx),
 			DesInfo:        fmt.Sprintf("%dETRNodeTypeCellRoot%d", frameNode.tframeObj.GetFrameConfig().ZoneID, idx),
 			IsServerClient: true,
 		}
@@ -82,7 +82,7 @@ func (frameNode *FrameNodeCellGate) InitConnectServer() bool {
 				NodeDes:   fmt.Sprintf("%d_ETRNodeTypeCellGate%d", frameNode.tframeObj.GetFrameConfig().ZoneID, frameNode.nodeIndex),
 			}
 			cb := func(okCode int32, msgData []byte, env *iframe.TRRemoteMsgEnv) {
-				loghlp.Infof("gate register to centerserver callback suss:%d", okCode)
+				loghlp.Infof("gate register to centerserver callback succ:%d", okCode)
 			}
 			frameNode.tframeObj.ForwardMessage(
 				protocol.EMsgClassFrame,
@@ -101,7 +101,7 @@ func (frameNode *FrameNodeCellGate) InitConnectServer() bool {
 		userData := &iframe.SessionUserData{
 			DataType:       iframe.ESessionDataTypeNetInfo,
 			NodeType:       trnode.ETRNodeTypeCellCenter,
-			NodeIndex:      frameNode.nodeIndex,
+			NodeIndex:      int32(idx),
 			DesInfo:        fmt.Sprintf("%dETRNodeTypeCellCenter%d", frameNode.tframeObj.GetFrameConfig().ZoneID, idx),
 			IsServerClient: true,
 		}
@@ -131,7 +131,7 @@ func (frameNode *FrameNodeCellGate) InitConnectServer() bool {
 				NodeDes:   fmt.Sprintf("%d_ETRNodeTypeCellGate%d", frameNode.tframeObj.GetFrameConfig().ZoneID, frameNode.nodeIndex),
 			}
 			cb := func(okCode int32, msgData []byte, env *iframe.TRRemoteMsgEnv) {
-				loghlp.Infof("gate register to centerserver callback suss:%d", okCode)
+				loghlp.Infof("gate register to logicserver callback succ:%d", okCode)
 			}
 			frameNode.tframeObj.ForwardMessage(
 				protocol.EMsgClassFrame,
@@ -150,7 +150,7 @@ func (frameNode *FrameNodeCellGate) InitConnectServer() bool {
 		userData := &iframe.SessionUserData{
 			DataType:       iframe.ESessionDataTypeNetInfo,
 			NodeType:       trnode.ETRNodeTypeCellLogic,
-			NodeIndex:      frameNode.nodeIndex,
+			NodeIndex:      int32(idx),
 			DesInfo:        fmt.Sprintf("%dETRNodeTypeCellLogic%d", frameNode.tframeObj.GetFrameConfig().ZoneID, idx),
 			IsServerClient: true,
 		}
@@ -180,7 +180,7 @@ func (frameNode *FrameNodeCellGate) InitConnectServer() bool {
 				NodeDes:   fmt.Sprintf("%d_ETRNodeTypeCellGate%d", frameNode.tframeObj.GetFrameConfig().ZoneID, frameNode.nodeIndex),
 			}
 			cb := func(okCode int32, msgData []byte, env *iframe.TRRemoteMsgEnv) {
-				loghlp.Infof("gate register to cellview callback suss:%d", okCode)
+				loghlp.Infof("gate register to cellview callback succ:%d", okCode)
 			}
 			frameNode.tframeObj.ForwardMessage(
 				protocol.EMsgClassFrame,
@@ -199,7 +199,7 @@ func (frameNode *FrameNodeCellGate) InitConnectServer() bool {
 		userData := &iframe.SessionUserData{
 			DataType:       iframe.ESessionDataTypeNetInfo,
 			NodeType:       trnode.ETRNodeTypeCellView, // 当前连接的节点
-			NodeIndex:      frameNode.nodeIndex,
+			NodeIndex:      int32(idx),
 			DesInfo:        fmt.Sprintf("%dETRNodeTypeCellView%d", frameNode.tframeObj.GetFrameConfig().ZoneID, idx),
 			IsServerClient: true,
 		}

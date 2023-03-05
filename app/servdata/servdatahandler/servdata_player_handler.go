@@ -138,12 +138,18 @@ func HandleESMsgPlayerSaveRoleData(tmsgCtx *iframe.TMsgContext) (isok int32, ret
 			switch v.TableID {
 			case ormdef.ETableRoleBase:
 				{
+					dataPlayer.DataTbRoleBase.FromBytes(v.Data)
+
 					tbRoleBase := tbobj.NewTbRoleBase()
 					tbRoleBase.FromBytes(v.Data)
-					dataPlayer.DataTbRoleBase.FromBytes(v.Data)
 					// 发送到db线程更新
-					dbJob := func() {
-						gameDB.Model(tbRoleBase.GetOrmMeta()).Select("*").Updates(tbRoleBase.GetOrmMeta())
+					dbJob := func() bool {
+						errDB := gameDB.Model(tbRoleBase.GetOrmMeta()).Select("*").Updates(tbRoleBase.GetOrmMeta()).Error
+						if errDB != nil {
+							loghlp.Errorf("save table error:%s", errDB.Error())
+							return false
+						}
+						return true
 					}
 					dbGlobal.PostDBJob(&servdatamain.DataDBJob{
 						DoJob: dbJob,
@@ -154,15 +160,18 @@ func HandleESMsgPlayerSaveRoleData(tmsgCtx *iframe.TMsgContext) (isok int32, ret
 				// -----playertable codetag6 begin-----------------
 			case ormdef.ETableRoleEquip:
 				{
+					dataPlayer.DataTbRoleEquip.FromBytes(v.Data)
+
 					tbSaveObj := tbobj.NewTbRoleEquip()
 					tbSaveObj.FromBytes(v.Data)
-					dataPlayer.DataTbRoleEquip.FromBytes(v.Data)
 					// 发送到db线程更新
-					dbJob := func() {
-						err := gameDB.Model(tbSaveObj.GetOrmMeta()).Select("*").Updates(tbSaveObj.GetOrmMeta()).Error
-						if err != nil {
-							loghlp.Errorf("save table error:%s", err.Error())
+					dbJob := func() bool {
+						errDB := gameDB.Model(tbSaveObj.GetOrmMeta()).Select("*").Updates(tbSaveObj.GetOrmMeta()).Error
+						if errDB != nil {
+							loghlp.Errorf("save table error:%s", errDB.Error())
+							return false
 						}
+						return true
 					}
 					dbGlobal.PostDBJob(&servdatamain.DataDBJob{
 						DoJob: dbJob,
@@ -171,15 +180,19 @@ func HandleESMsgPlayerSaveRoleData(tmsgCtx *iframe.TMsgContext) (isok int32, ret
 				}
 			case ormdef.ETableRoleExtra:
 				{
+					dataPlayer.DataTbRoleExtra.FromBytes(v.Data)
+
 					tbSaveObj := tbobj.NewTbRoleExtra()
 					tbSaveObj.FromBytes(v.Data)
-					dataPlayer.DataTbRoleExtra.FromBytes(v.Data)
 					// 发送到db线程更新
-					dbJob := func() {
-						err := gameDB.Model(tbSaveObj.GetOrmMeta()).Select("*").Updates(tbSaveObj.GetOrmMeta()).Error
-						if err != nil {
-							loghlp.Errorf("save table error:%s", err.Error())
+					dbJob := func() bool {
+						errDB := gameDB.Model(tbSaveObj.GetOrmMeta()).Select("*").Updates(tbSaveObj.GetOrmMeta()).Error
+						if errDB != nil {
+							loghlp.Errorf("save table error:%s", errDB.Error())
+							return false
 						}
+
+						return true
 					}
 					dbGlobal.PostDBJob(&servdatamain.DataDBJob{
 						DoJob: dbJob,
@@ -188,15 +201,18 @@ func HandleESMsgPlayerSaveRoleData(tmsgCtx *iframe.TMsgContext) (isok int32, ret
 				}
 			case ormdef.ETableRoleCoin:
 				{
+					dataPlayer.DataTbRoleCoin.FromBytes(v.Data)
+
 					tbSaveObj := tbobj.NewTbRoleCoin()
 					tbSaveObj.FromBytes(v.Data)
-					dataPlayer.DataTbRoleCoin.FromBytes(v.Data)
 					// 发送到db线程更新
-					dbJob := func() {
-						err := gameDB.Model(tbSaveObj.GetOrmMeta()).Select("*").Updates(tbSaveObj.GetOrmMeta()).Error
-						if err != nil {
-							loghlp.Errorf("save table error:%s", err.Error())
+					dbJob := func() bool {
+						errDB := gameDB.Model(tbSaveObj.GetOrmMeta()).Select("*").Updates(tbSaveObj.GetOrmMeta()).Error
+						if errDB != nil {
+							loghlp.Errorf("save table error:%s", errDB.Error())
+							return false
 						}
+						return true
 					}
 					dbGlobal.PostDBJob(&servdatamain.DataDBJob{
 						DoJob: dbJob,
@@ -205,15 +221,18 @@ func HandleESMsgPlayerSaveRoleData(tmsgCtx *iframe.TMsgContext) (isok int32, ret
 				}
 			case ormdef.ETableRoleBag:
 				{
+					dataPlayer.DataTbRoleBag.FromBytes(v.Data)
+
 					tbSaveObj := tbobj.NewTbRoleBag()
 					tbSaveObj.FromBytes(v.Data)
-					dataPlayer.DataTbRoleBag.FromBytes(v.Data)
 					// 发送到db线程更新
-					dbJob := func() {
-						err := gameDB.Model(tbSaveObj.GetOrmMeta()).Select("*").Updates(tbSaveObj.GetOrmMeta()).Error
-						if err != nil {
-							loghlp.Errorf("save table error:%s", err.Error())
+					dbJob := func() bool {
+						errDB := gameDB.Model(tbSaveObj.GetOrmMeta()).Select("*").Updates(tbSaveObj.GetOrmMeta()).Error
+						if errDB != nil {
+							loghlp.Errorf("save table error:%s", errDB.Error())
+							return false
 						}
+						return true
 					}
 					dbGlobal.PostDBJob(&servdatamain.DataDBJob{
 						DoJob: dbJob,
@@ -223,7 +242,7 @@ func HandleESMsgPlayerSaveRoleData(tmsgCtx *iframe.TMsgContext) (isok int32, ret
 				// -----playertable codetag6 end-------------------
 			default:
 				{
-					loghlp.Errorf("known table id:%d", v.TableID)
+					loghlp.Errorf("unknown table id:%d", v.TableID)
 				}
 			}
 		}

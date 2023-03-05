@@ -8,10 +8,11 @@
 package protocol
 
 const (
-	ECodeSuccess     = 0 // 正常
-	ECodeSysError    = 1 // 系统错误
-	ECodeParamError  = 2 // 参数错误
-	ECodeAsyncHandle = 3 // 异步处理,当前不处理
+	ECodeSuccess         = 0 // 正常
+	ECodeSysError        = 1 // 系统错误
+	ECodeParamError      = 2 // 参数错误
+	ECodeAsyncHandle     = 3 // 异步处理,当前不处理
+	ECodeNotFindServNode = 4 // 找不到服务器节点
 	// 系统错误定义
 	ECodeDBError            = 100 // db错误
 	ECodePBDecodeError      = 101 // pb反序列化错误

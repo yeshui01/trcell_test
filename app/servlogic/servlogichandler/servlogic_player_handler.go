@@ -92,7 +92,7 @@ func HandleESMsgPlayerCreateRole(tmsgCtx *iframe.TMsgContext) (isok int32, retDa
 			trframe.SendReplyMessage(okCode,
 				cbRep,
 				env)
-			loghlp.Infof("user(%d)[%s][%s] create role suss finshi!",
+			loghlp.Infof("user(%d)[%s][%s] create role succ finshi!",
 				req.UserID,
 				req.UserName,
 				req.Nickname)
@@ -207,7 +207,7 @@ func HandleESMsgPlayerLoginGame(tmsgCtx *iframe.TMsgContext) (isok int32, retDat
 			trframe.SendReplyMessage(okCode,
 				rep,
 				env)
-			loghlp.Infof("user(%d)[%s][%s] logingame suss finshi!",
+			loghlp.Infof("user(%d)[%s][%s] logingame succ finshi!",
 				cbRep.RoleID,
 				req.Account,
 				logicPlayer.GetBaseData().GetRoleName())
@@ -267,11 +267,12 @@ func HandleESMsgPlayerDisconnect(tmsgCtx *iframe.TMsgContext) (isok int32, retDa
 	if !trframe.DecodePBMessage(tmsgCtx.NetMessage, req) {
 		return protocol.ECodePBDecodeError, pbtools.MakeErrorParams("pberror"), iframe.EHandleContent
 	}
+	rep := &pbserver.ESMsgPlayerDisconnectRep{}
 	loghlp.Infof("player(%d) disconnect", tmsgCtx.NetMessage.SecondHead.ID)
 	logicPlayer := servLogic.GetLogicGlobal().FindPlayer(tmsgCtx.NetMessage.SecondHead.ID)
 	if logicPlayer != nil {
 		servLogic.GetLogicGlobal().HandlePlayerOffline(logicPlayer)
 	}
 	trframe.LogMsgInfo(tmsgCtx.NetMessage, req)
-	return protocol.ECodeSuccess, nil, iframe.EHandleNone
+	return protocol.ECodeSuccess, rep, iframe.EHandleContent
 }

@@ -18,10 +18,14 @@ func (tf *TRFrame) onClientConnect(frameSession *FrameSession, userData interfac
 				frameSession.isServerClient = netUserData.IsServerClient
 				// 关联节点信息
 				frameSession.nodeInfo = &trnode.TRNodeInfo{
-					ZoneID:    tf.frameConfig.ZoneID,
+					ZoneID:    tf.frameConfig.ZoneID, // 默认使用当前zoneID
 					NodeType:  netUserData.NodeType,
 					NodeIndex: netUserData.NodeIndex,
 					DesInfo:   netUserData.DesInfo,
+				}
+				if netUserData.ZoneID > 0 {
+					// 有指定的zoneID时,使用指定的zoneID
+					frameSession.nodeInfo.ZoneID = netUserData.ZoneID
 				}
 				tf.frameNodeMgr.AddNode(frameSession)
 				loghlp.Infof("onClientConnect,addNode:%+v", netUserData)

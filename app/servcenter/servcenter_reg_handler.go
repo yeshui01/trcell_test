@@ -24,4 +24,9 @@ func (serv *CellServCenter) RegisterMsgHandler() {
 		protocol.ESMsgClassPlayer,
 		protocol.ESMsgPlayerLoginGame,
 		servcenterhandler.HandleESMsgPlayerLoginGame)
+
+	trframe.RegWorkMsgHandler(
+		protocol.ESMsgClassPlayer,
+		protocol.ESMsgPlayerDisconnect,
+		servcenterhandler.HandleESMsgPlayerDisconnect)
 }

@@ -1,6 +1,8 @@
 package accrouter
 
 import (
+	"trcell/app/account/accmiddleware"
+
 	"github.com/bluele/gcache"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -29,4 +31,7 @@ func SetupAccountApi(app IAccApp) {
 	// 服务器
 	servApi := accApp.GetRouter().Group("/server")
 	servApi.POST("/list", getServerList)
+
+	// 限流设置
+	accApp.GetRouter().Use(accmiddleware.MaxAllowed(1000)) // 限制每秒最多允许1000个请求
 }

@@ -1,0 +1,16 @@
+syntax = "proto3";
+package pbrpc;
+option go_package = "./pbrpc";
+
+
+// misc测试
+message MiscReq {
+    string sendText = 1;
+}
+message MiscRep {
+    string sendText = 1;
+}
+
+service MiscTest {
+    rpc MiscTest(MiscReq) returns (MiscRep) {}
+}

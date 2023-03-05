@@ -84,3 +84,17 @@ func (peerInfo *PlayerNetPeer) GetNodeIndex(nodeType int32) int32 {
 	}
 	return 0
 }
+
+// 根据zoneID, nodeType, nodeIndex生成节点唯一id标识
+func GenNodeUid(zoneID int32, nodeType int32, nodeIndex int32) int64 {
+	return int64(zoneID)*100000000 + int64(nodeType)*10000 + int64(nodeIndex)
+}
+
+// 根据节点唯一id标识解析出zoneID, nodeType, nodeIndex
+func GetNodePartIDByNodeUid(nodeUid int64) (int32, int32, int32) {
+	zoneID := int32(nodeUid / 100000000)
+	nodeType := int32(nodeUid % 100000000 / 10000)
+	nodeIndex := int32(nodeUid % 10000)
+
+	return zoneID, nodeType, nodeIndex
+}

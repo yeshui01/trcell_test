@@ -188,3 +188,19 @@ func HandleESMsgPlayerLoginGame(tmsgCtx *iframe.TMsgContext) (isok int32, retDat
 	)
 	return protocol.ECodeSuccess, rep, iframe.EHandlePending
 }
+
+// 离线
+func HandleESMsgPlayerDisconnect(tmsgCtx *iframe.TMsgContext) (isok int32, retData interface{}, rt iframe.IHandleResultType) {
+	req := &pbserver.ESMsgPlayerDisconnectReq{}
+	if !trframe.DecodePBMessage(tmsgCtx.NetMessage, req) {
+		return protocol.ECodePBDecodeError, pbtools.MakeErrorParams("pberror"), iframe.EHandleContent
+	}
+	rep := &pbserver.ESMsgPlayerDisconnectRep{}
+	loghlp.Infof("player(%d) disconnect", tmsgCtx.NetMessage.SecondHead.ID)
+	// logicPlayer := servCenter.GetCenterGlobal().FindPlayer(tmsgCtx.NetMessage.SecondHead.ID)
+	// if logicPlayer != nil {
+	// 	servLogic.GetLogicGlobal().HandlePlayerOffline(logicPlayer)
+	// }
+	trframe.LogMsgInfo(tmsgCtx.NetMessage, req)
+	return protocol.ECodeSuccess, rep, iframe.EHandleContent
+}

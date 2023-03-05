@@ -27,12 +27,14 @@ type TRRemoteCallInfo struct {
 func MakeInnerMsg(msgClass int32, msgType int32, data []byte) *evhub.NetMessage {
 	return evhub.MakeMessage(msgClass, msgType, data)
 }
+
 func MakeMsgEnv(srcssID int32, srcMsg *evhub.NetMessage) *iframe.TRRemoteMsgEnv {
 	return &iframe.TRRemoteMsgEnv{
 		SrcSessionID: srcssID,
 		SrcMessage:   srcMsg,
 	}
 }
+
 func MakeClientMsgEnv(userID int64, srcMsg *evhub.NetMessage, userData interface{}) *iframe.TRRemoteMsgEnv {
 	e := &iframe.TRRemoteMsgEnv{
 		SrcSessionID: 0,
@@ -48,6 +50,7 @@ func MakeClientMsgEnv(userID int64, srcMsg *evhub.NetMessage, userData interface
 	}
 	return e
 }
+
 func MakeMsgEnv2(iss iframe.ISession, srcMsg *evhub.NetMessage) *iframe.TRRemoteMsgEnv {
 	if iss == nil {
 		return MakeMsgEnv(0, srcMsg)
@@ -58,6 +61,7 @@ func MakeMsgEnv2(iss iframe.ISession, srcMsg *evhub.NetMessage) *iframe.TRRemote
 		SrcMessage:   srcMsg,
 	}
 }
+
 func setSecondHead(msg *evhub.NetMessage, id int64, reqID uint64, repID uint64) {
 	msg.Head.HasSecond = 1
 	msg.SecondHead = &evhub.NetMsgSecondHead{
@@ -83,13 +87,14 @@ func newRemoteMsgMgr(frameObj *TRFrame) *RemoteMsgCallMgr {
 }
 
 func (mgr *RemoteMsgCallMgr) update(curTimeMs int64) {
-	if curTimeMs-mgr.lastUpdTime < 10000 {
+	if curTimeMs-mgr.lastUpdTime < 5000 {
 		return
 	}
+	mgr.lastUpdTime = curTimeMs
 	// 检测超时
 	for k, v := range mgr.callList {
 		if curTimeMs-v.beginTime >= 10000 {
-			loghlp.Errorf("remote call timeout(%d,%d)reqId:%d", v.msgClass, v.msgType, k)
+			loghlp.Errorf("remote call timeout,msg(%d_%d)reqId(%d),beginTime(%d)", v.msgClass, v.msgType, k, v.beginTime)
 			delete(mgr.callList, k)
 		}
 	}
@@ -135,5 +140,3 @@ func (mgr *RemoteMsgCallMgr) makeCallInfo(msgClass int32, msgType int32, cb ifra
 	mgr.callList[callInfo.reqID] = callInfo
 	return callInfo
 }
-
-// 发送注册信息到某个节点

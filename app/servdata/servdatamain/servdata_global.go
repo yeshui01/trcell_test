@@ -8,6 +8,7 @@
 package servdatamain
 
 import (
+	"sync"
 	"time"
 	"trcell/pkg/loghlp"
 	"trcell/pkg/tbobj"
@@ -17,7 +18,7 @@ import (
 )
 
 type DataDBJob struct {
-	DoJob func()
+	DoJob func() bool
 }
 
 type ServDataGlobal struct {
@@ -25,7 +26,9 @@ type ServDataGlobal struct {
 	dataPlayers    map[int64]*DataPlayer
 	lastUpdateTime int64
 	dbJobCh        chan *DataDBJob
+	dbJobStopCh    chan bool
 	dbJobStop      bool
+	dbWaitWg       sync.WaitGroup
 	// 全局数据表
 	DataTbCsGlobal *tbobj.TbCsGlobal
 }
@@ -36,6 +39,7 @@ func NewServDataGlobal() *ServDataGlobal {
 		dataPlayers:    make(map[int64]*DataPlayer),
 		dbJobCh:        make(chan *DataDBJob, 2048),
 		dbJobStop:      false,
+		dbJobStopCh:    make(chan bool),
 		DataTbCsGlobal: tbobj.NewTbCsGlobal(),
 	}
 }
@@ -88,39 +92,67 @@ func (servGlobal *ServDataGlobal) Update(curTime int64) {
 
 // DB更新线程
 func (servGlobal *ServDataGlobal) StartDBRun() {
+	servGlobal.dbWaitWg.Add(1)
 	go func() {
+		var lastDBTime int64 = 0
+		sectick := time.NewTicker(time.Second)
 		for {
 			select {
 			case dbOpt, ok := <-servGlobal.dbJobCh:
 				{
 					if ok {
+						servGlobal.dbJobStop = false
 						loghlp.Debugf("do db job")
-						dbOpt.DoJob()
-					} else {
-						servGlobal.dbJobStop = true
+						var tryCount int = 0
+						for !dbOpt.DoJob() {
+							if lastDBTime > 0 { // 说明此时已经开始计时了
+								lastDBTime = timeutil.NowTime()
+							}
+							tryCount++
+							time.Sleep(time.Second) // 休眠1秒继续尝试
+							loghlp.Errorf("do db job fail, try continue")
+							if tryCount >= 10 {
+								break
+							}
+						}
+						if lastDBTime > 0 { // 说明此时已经开始计时了
+							lastDBTime = timeutil.NowTime()
+						}
 					}
 					break
 				}
+			case <-sectick.C:
+				{
+					// 5秒钟还没有任务,那就可以停掉了
+					if lastDBTime > 0 && timeutil.NowTime()-lastDBTime >= 5 {
+						servGlobal.dbJobStop = true
+						sectick.Stop()
+					}
+					break
+				}
+			case <-servGlobal.dbJobStopCh:
+				{
+					// 停止
+					lastDBTime = timeutil.NowTime() // 开始计时
+					break
+				}
 			}
+
 			if servGlobal.dbJobStop {
 				break
 			}
 		}
 		loghlp.Info("exit db run")
+		servGlobal.dbWaitWg.Done()
 	}()
 }
 func (servGlobal *ServDataGlobal) StopDBRun() {
+	close(servGlobal.dbJobStopCh)
+	// 等待任务执行结束
+	servGlobal.dbWaitWg.Wait()
 	close(servGlobal.dbJobCh)
-	// 等待结束
-	for {
-		if servGlobal.dbJobStop {
-			time.Sleep(time.Second)
-			break
-		} else {
-			time.Sleep(time.Second)
-		}
-	}
 }
+
 func (servGlobal *ServDataGlobal) PostDBJob(dbJob *DataDBJob) {
 	servGlobal.dbJobCh <- dbJob
 }

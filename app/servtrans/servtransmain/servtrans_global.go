@@ -7,6 +7,8 @@
  */
 package servtransmain
 
+import "trcell/pkg/loghlp"
+
 type ServTransGlobal struct {
 	lastUpdateTime int64
 }
@@ -24,5 +26,5 @@ func (servGlobal *ServTransGlobal) FrameUpdate(curTimeMs int64) {
 }
 
 func (servGlobal *ServTransGlobal) Update(curTime int64) {
-	//loghlp.Debugf("socialGlobal Update:%d", curTime)
+	loghlp.Debugf("transGlobal Update:%d", curTime)
 }

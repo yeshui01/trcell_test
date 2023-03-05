@@ -236,9 +236,9 @@ func (hub *EventHub) AllocateSession(sessionType uint8) *NetSession {
 		return nil
 	}
 	s := NewNetSession(sessionType, hub.sessionIdx)
-	if sessionType == NetSessionTypeServer {
-		s.writeCh = make(chan *NetMessage, ServerSessionWriteChanSize)
-	}
+	// if sessionType == NetSessionTypeServer {
+	//	s.writeCh = make(chan *NetMessage, ServerSessionWriteChanSize)
+	// }
 	return s
 }
 
@@ -414,7 +414,7 @@ func NewHub() *EventHub {
 	return &EventHub{
 		sessionMap:        make(map[int32]*NetSession),
 		stopChain:         make(chan bool),
-		sessionIdx:        1000,
+		sessionIdx:        10000,
 		cmdChain:          make(chan *HubCommand, HubCmdChanSize),
 		stopingOpt:        0,
 		waitCloseSessions: make(map[int32]*NetSession),

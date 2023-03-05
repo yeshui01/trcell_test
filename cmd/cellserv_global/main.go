@@ -78,7 +78,7 @@ func TestGRPCServ() {
 func main() {
 	loghlp.SetConsoleLogLevel(logrus.DebugLevel)
 	loghlp.ActiveConsoleLog()
-	loghlp.Debugf("hello cellserv_account")
+	loghlp.Debugf("hello cellserv_global")
 	pflag.String("configPath", "./", "config file path")
 	pflag.String("index", "0", "server index")
 	pflag.Parse()

@@ -106,15 +106,15 @@ func (serv *CellServGate) HandleCmdTcpMessage(frameCmd *trframe.TRFrameCommand) 
 	hgc := serv.ConnMgr.GetConnection(tcpMessage.TcpConn)
 	if hgc != nil {
 		if serv.IsForwardToView(int32(tcpMessage.HubMsg.Head.MsgClass), int32(tcpMessage.HubMsg.Head.MsgType)) {
-			cbEnv := trframe.MakeMsgEnv(0,
-				tcpMessage.HubMsg)
-			cbEnv.UserData = hgc
-			cb := func(okCode int32, msgData []byte, env *iframe.TRRemoteMsgEnv) {
-				loghlp.Infof("trans view client msg callback succ,okCode:%d", okCode)
-				serv.SendTcpClientReplyMessage2(okCode, msgData, env)
-			}
 			gateUser := serv.UserMgr.GetGateUser(hgc.UserID)
 			if gateUser != nil {
+				cbEnv := trframe.MakeMsgEnv(0,
+					tcpMessage.HubMsg)
+				cbEnv.UserData = hgc
+				cb := func(okCode int32, msgData []byte, env *iframe.TRRemoteMsgEnv) {
+					loghlp.Infof("trans view client msg callback succ,okCode:%d", okCode)
+					serv.SendTcpClientReplyMessage2(okCode, msgData, env)
+				}
 				if gateUser.GetNetPeer(trnode.ETRNodeTypeCellView) != nil {
 					trframe.ForwardZoneClientMessage(
 						int32(tcpMessage.HubMsg.Head.MsgClass),
@@ -143,15 +143,15 @@ func (serv *CellServGate) HandleCmdTcpMessage(frameCmd *trframe.TRFrameCommand) 
 				loghlp.Errorf("not find gate user:%d", hgc.UserID)
 			}
 		} else if serv.IsForwardToCenter(int32(tcpMessage.HubMsg.Head.MsgClass), int32(tcpMessage.HubMsg.Head.MsgType)) {
-			cbEnv := trframe.MakeMsgEnv(0,
-				tcpMessage.HubMsg)
-			cbEnv.UserData = hgc
-			cb := func(okCode int32, msgData []byte, env *iframe.TRRemoteMsgEnv) {
-				loghlp.Infof("trans center client msg callback succ,okCode:%d", okCode)
-				serv.SendTcpClientReplyMessage2(okCode, msgData, env)
-			}
 			gateUser := serv.UserMgr.GetGateUser(hgc.UserID)
 			if gateUser != nil {
+				cbEnv := trframe.MakeMsgEnv(0,
+					tcpMessage.HubMsg)
+				cbEnv.UserData = hgc
+				cb := func(okCode int32, msgData []byte, env *iframe.TRRemoteMsgEnv) {
+					loghlp.Infof("trans center client msg callback succ,okCode:%d", okCode)
+					serv.SendTcpClientReplyMessage2(okCode, msgData, env)
+				}
 				trframe.ForwardZoneClientMessage(
 					int32(tcpMessage.HubMsg.Head.MsgClass),
 					int32(tcpMessage.HubMsg.Head.MsgType),
@@ -166,15 +166,15 @@ func (serv *CellServGate) HandleCmdTcpMessage(frameCmd *trframe.TRFrameCommand) 
 				loghlp.Errorf("not find gate user:%d", hgc.UserID)
 			}
 		} else if serv.IsForwardToGame(int32(tcpMessage.HubMsg.Head.MsgClass), int32(tcpMessage.HubMsg.Head.MsgType)) {
-			cbEnv := trframe.MakeMsgEnv(0,
-				tcpMessage.HubMsg)
-			cbEnv.UserData = hgc
-			cb := func(okCode int32, msgData []byte, env *iframe.TRRemoteMsgEnv) {
-				loghlp.Infof("trans game client msg callback succ,okCode:%d", okCode)
-				serv.SendTcpClientReplyMessage2(okCode, msgData, env)
-			}
 			gateUser := serv.UserMgr.GetGateUser(hgc.UserID)
 			if gateUser != nil {
+				cbEnv := trframe.MakeMsgEnv(0,
+					tcpMessage.HubMsg)
+				cbEnv.UserData = hgc
+				cb := func(okCode int32, msgData []byte, env *iframe.TRRemoteMsgEnv) {
+					loghlp.Infof("trans game client msg callback succ,okCode:%d", okCode)
+					serv.SendTcpClientReplyMessage2(okCode, msgData, env)
+				}
 				trframe.ForwardZoneClientMessage(
 					int32(tcpMessage.HubMsg.Head.MsgClass),
 					int32(tcpMessage.HubMsg.Head.MsgType),

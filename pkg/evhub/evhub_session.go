@@ -50,7 +50,7 @@ type SessionMsg struct {
 }
 
 func NewNetSession(t uint8, sessID int32) *NetSession {
-	return &NetSession{
+  s := &NetSession{
 		sessionType:       t,
 		netConn:           nil,
 		lastAliveTime:     time.Now().Unix(),
@@ -64,6 +64,12 @@ func NewNetSession(t uint8, sessID int32) *NetSession {
 		reConnect:         false, // 是否重连
 		fromReconn:        false, // 是否来自重连
 	}
+  	if s.sessionType == NetSessionTypeServer {
+		s.writeCh = make(chan *NetMessage, ServerSessionWriteChanSize)
+	} else {
+		s.writeCh = make(chan *NetMessage)
+	}
+ 	return s
 }
 
 func (s *NetSession) Close() {
@@ -110,7 +116,7 @@ func (s *NetSession) startReadWork(hub *EventHub) {
 			s.netConn.SetReadDeadline(time.Now().Add(time.Second * 40))
 			_, err := io.ReadFull(s.netConn, s.headerSlice)
 			if err != nil {
-				logrus.Errorf("sessionID:%d read failed, %s", s.sessionID, err)
+				logrus.Errorf("sessionID:%d read failed, %s", s.sessionID, err.Error())
 				hub.PostCommand(HubCmdNetEvent, NetEventClose, s)
 				break
 			}
@@ -121,7 +127,7 @@ func (s *NetSession) startReadWork(hub *EventHub) {
 			if hd.HasSecond > 0 {
 				_, err := io.ReadFull(s.netConn, s.secondHeaderBytes)
 				if err != nil {
-					logrus.Errorf("sessionID:%d read failed2, %s,len:%d,msg(%d_%d)", s.sessionID, err.Error(), hd.Len, hd.MsgClass, hd.MsgType)
+					logrus.Errorf("sessionID:%d read failed, %s,len:%d,msg(%d_%d)", s.sessionID, err.Error(), hd.Len, hd.MsgClass, hd.MsgType)
 					hub.PostCommand(HubCmdNetEvent, NetEventClose, s)
 					break
 				}
@@ -132,7 +138,7 @@ func (s *NetSession) startReadWork(hub *EventHub) {
 			messageBody := make([]byte, hd.Len-MsgHeadSize)
 			_, err = io.ReadFull(s.netConn, messageBody)
 			if err != nil {
-				logrus.WithField("sessionID", s.sessionID).Errorf("read msgbody failed, %s,len:%d,msg(%d_%d)", err, hd.Len, hd.MsgClass, hd.MsgType)
+				logrus.WithField("sessionID", s.sessionID).Errorf("read msgbody failed, %s,len:%d,msg(%d_%d)", err.Error(), hd.Len, hd.MsgClass, hd.MsgType)
 				hub.PostCommand(HubCmdNetEvent, NetEventClose, s)
 				break
 			}

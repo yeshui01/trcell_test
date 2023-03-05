@@ -55,22 +55,23 @@ type TRFrameCommand struct {
 	Hub     *evhub.EventHub
 }
 type TRFrame struct {
-	frameNodeMgr   *FrameNodeMgr
-	evHub          *evhub.EventHub
-	runStep        EFrameStep
-	loopFuncList   []FrameRunFunc
-	curWorkNode    ITRFrameWorkNode // 当前工作节点
-	frameConfig    *tframeconfig.FrameConfig
-	nodeType       int32
-	nodeIndex      int32
-	netSessionList map[int32]*FrameSession
-	userStepRun    []func(curTimeMs int64) bool
-	userCmdHandle  func(userCmd *TRFrameCommand)
-	remoteMsgMgr   *RemoteMsgCallMgr
-	msgDispatcher  *tframedispatcher.FrameMsgDispatcher
-	keepNodeTime   int64
-	nowFrameTimeMs int64
-	msgDoneList    []func() // 消息处理后的执行列表
+	frameNodeMgr    *FrameNodeMgr
+	evHub           *evhub.EventHub
+	runStep         EFrameStep
+	loopFuncList    []FrameRunFunc
+	curWorkNode     ITRFrameWorkNode // 当前工作节点
+	frameConfig     *tframeconfig.FrameConfig
+	nodeType        int32
+	nodeIndex       int32
+	netSessionList  map[int32]*FrameSession
+	userStepRun     []func(curTimeMs int64) bool
+	userCmdHandle   func(userCmd *TRFrameCommand)
+	remoteMsgMgr    *RemoteMsgCallMgr
+	multiMsgCallMgr *MultiMsgCallMgr
+	msgDispatcher   *tframedispatcher.FrameMsgDispatcher
+	keepNodeTime    int64
+	nowFrameTimeMs  int64
+	msgDoneList     []func() // 消息处理后的执行列表
 }
 
 func newTRFrame(configPath string, nType int32, nIndex int32) *TRFrame {
@@ -100,6 +101,7 @@ func newTRFrame(configPath string, nType int32, nIndex int32) *TRFrame {
 	}
 	tf.initNodeSetting()
 	tf.remoteMsgMgr = newRemoteMsgMgr(tf)
+	tf.multiMsgCallMgr = newMultiMsgCallMgr(tf)
 	tf.regCallback()
 	tf.evHub.AddFrameLoopFunc(func(curTimeMs int64) {
 		tf.frameRun(curTimeMs)
@@ -110,6 +112,7 @@ func newTRFrame(configPath string, nType int32, nIndex int32) *TRFrame {
 func (tf *TRFrame) frameRun(curTimeMs int64) {
 	tf.nowFrameTimeMs = curTimeMs
 	tf.remoteMsgMgr.update(curTimeMs)
+	tf.multiMsgCallMgr.update(curTimeMs)
 	switch tf.runStep {
 	case ETRFrameStepCheck:
 		{
@@ -479,7 +482,7 @@ func (tf *TRFrame) updateKeepNodeAlive(curTimeMs int64) {
 		if curTimeMs/1000-tn.LastHeartTime() >= 15 {
 			sendMsg := MakeInnerMsg(protocol.EMsgClassFrame, protocol.EFrameMsgKeepNodeHeart, make([]byte, 0))
 			cb := func(okCode int32, msgData []byte, env *iframe.TRRemoteMsgEnv) {
-				loghlp.Infof("keep node heart callback suss:%d", okCode)
+				loghlp.Infof("keep node heart callback succ:%d", okCode)
 			}
 			callInfo := tf.remoteMsgMgr.makeCallInfo(protocol.EMsgClassFrame,
 				protocol.EFrameMsgKeepNodeHeart,
@@ -491,12 +494,19 @@ func (tf *TRFrame) updateKeepNodeAlive(curTimeMs int64) {
 		}
 	}
 }
+
 func (tf *TRFrame) GetCurNodeType() int32 {
 	return tf.curWorkNode.NodeType()
 }
+
 func (tf *TRFrame) registerFrameHandler() {
 	tf.msgDispatcher.RegisterMsgHandler(
 		protocol.EMsgClassFrame,
 		protocol.EFrameMsgRegisterServerInfo,
 		handleRegisterNodeInfo)
+
+	tf.msgDispatcher.RegisterMsgHandler(
+		protocol.EMsgClassFrame,
+		protocol.EFrameMsgTransMsg,
+		handleTransNodeMsg)
 }

@@ -32,7 +32,7 @@ func (frameNode *FrameNodeCellLogic) InitConnectServer() bool {
 				NodeDes:   fmt.Sprintf("%d_ETRNodeTypeCellLogic%d", frameNode.tframeObj.GetFrameConfig().ZoneID, frameNode.nodeIndex),
 			}
 			cb := func(okCode int32, msgData []byte, env *iframe.TRRemoteMsgEnv) {
-				loghlp.Infof("center register to cellroot callback suss:%d", okCode)
+				loghlp.Infof("center register to cellroot callback succ:%d", okCode)
 			}
 			frameNode.tframeObj.ForwardMessage(
 				protocol.EMsgClassFrame,
@@ -51,7 +51,7 @@ func (frameNode *FrameNodeCellLogic) InitConnectServer() bool {
 		userData := &iframe.SessionUserData{
 			DataType:       iframe.ESessionDataTypeNetInfo,
 			NodeType:       trnode.ETRNodeTypeCellRoot,
-			NodeIndex:      frameNode.nodeIndex,
+			NodeIndex:      int32(idx),
 			DesInfo:        fmt.Sprintf("%dETRNodeTypeCellRoot%d", frameNode.tframeObj.GetFrameConfig().ZoneID, idx),
 			IsServerClient: true,
 		}
@@ -81,7 +81,7 @@ func (frameNode *FrameNodeCellLogic) InitConnectServer() bool {
 				NodeDes:   fmt.Sprintf("%d_ETRNodeTypeCellLogic%d", frameNode.tframeObj.GetFrameConfig().ZoneID, frameNode.nodeIndex),
 			}
 			cb := func(okCode int32, msgData []byte, env *iframe.TRRemoteMsgEnv) {
-				loghlp.Infof("center register to celldata callback suss:%d", okCode)
+				loghlp.Infof("center register to celldata callback succ:%d", okCode)
 			}
 			frameNode.tframeObj.ForwardMessage(
 				protocol.EMsgClassFrame,
@@ -100,7 +100,7 @@ func (frameNode *FrameNodeCellLogic) InitConnectServer() bool {
 		userData := &iframe.SessionUserData{
 			DataType:       iframe.ESessionDataTypeNetInfo,
 			NodeType:       trnode.ETRNodeTypeCellData, // 当前连接的节点
-			NodeIndex:      frameNode.nodeIndex,
+			NodeIndex:      int32(idx),
 			DesInfo:        fmt.Sprintf("%dETRNodeTypeCellData%d", frameNode.tframeObj.GetFrameConfig().ZoneID, idx),
 			IsServerClient: true,
 		}
@@ -130,7 +130,7 @@ func (frameNode *FrameNodeCellLogic) InitConnectServer() bool {
 				NodeDes:   fmt.Sprintf("%d_ETRNodeTypeCellLogic%d", frameNode.tframeObj.GetFrameConfig().ZoneID, frameNode.nodeIndex),
 			}
 			cb := func(okCode int32, msgData []byte, env *iframe.TRRemoteMsgEnv) {
-				loghlp.Infof("logic register to cellcenter callback suss:%d", okCode)
+				loghlp.Infof("logic register to cellcenter callback succ:%d", okCode)
 			}
 			frameNode.tframeObj.ForwardMessage(
 				protocol.EMsgClassFrame,
@@ -149,7 +149,7 @@ func (frameNode *FrameNodeCellLogic) InitConnectServer() bool {
 		userData := &iframe.SessionUserData{
 			DataType:       iframe.ESessionDataTypeNetInfo,
 			NodeType:       trnode.ETRNodeTypeCellCenter, // 当前连接的节点
-			NodeIndex:      frameNode.nodeIndex,
+			NodeIndex:      int32(idx),
 			DesInfo:        fmt.Sprintf("%dETRNodeTypeCellCenter%d", frameNode.tframeObj.GetFrameConfig().ZoneID, idx),
 			IsServerClient: true,
 		}
@@ -179,7 +179,7 @@ func (frameNode *FrameNodeCellLogic) InitConnectServer() bool {
 				NodeDes:   fmt.Sprintf("%d_ETRNodeTypeCellLogic%d", frameNode.tframeObj.GetFrameConfig().ZoneID, frameNode.nodeIndex),
 			}
 			cb := func(okCode int32, msgData []byte, env *iframe.TRRemoteMsgEnv) {
-				loghlp.Infof("logic register to cellcenter callback suss:%d", okCode)
+				loghlp.Infof("logic register to cellcenter callback succ:%d", okCode)
 			}
 			frameNode.tframeObj.ForwardMessage(
 				protocol.EMsgClassFrame,
@@ -198,7 +198,7 @@ func (frameNode *FrameNodeCellLogic) InitConnectServer() bool {
 		userData := &iframe.SessionUserData{
 			DataType:       iframe.ESessionDataTypeNetInfo,
 			NodeType:       trnode.ETRNodeTypeCellGame, // 当前连接的节点
-			NodeIndex:      frameNode.nodeIndex,
+			NodeIndex:      int32(idx),
 			DesInfo:        fmt.Sprintf("%dETRNodeTypeCellGame%d", frameNode.tframeObj.GetFrameConfig().ZoneID, idx),
 			IsServerClient: true,
 		}
@@ -228,7 +228,7 @@ func (frameNode *FrameNodeCellLogic) InitConnectServer() bool {
 				NodeDes:   fmt.Sprintf("%d_ETRNodeTypeCellLogic%d", frameNode.tframeObj.GetFrameConfig().ZoneID, frameNode.nodeIndex),
 			}
 			cb := func(okCode int32, msgData []byte, env *iframe.TRRemoteMsgEnv) {
-				loghlp.Infof("logic register to cellcenter callback suss:%d", okCode)
+				loghlp.Infof("logic register to cellcenter callback succ:%d", okCode)
 			}
 			frameNode.tframeObj.ForwardMessage(
 				protocol.EMsgClassFrame,
@@ -247,7 +247,7 @@ func (frameNode *FrameNodeCellLogic) InitConnectServer() bool {
 		userData := &iframe.SessionUserData{
 			DataType:       iframe.ESessionDataTypeNetInfo,
 			NodeType:       trnode.ETRNodeTypeCellLog, // 当前连接的节点
-			NodeIndex:      frameNode.nodeIndex,
+			NodeIndex:      int32(idx),
 			DesInfo:        fmt.Sprintf("%dETRNodeTypeCellLog%d", frameNode.tframeObj.GetFrameConfig().ZoneID, idx),
 			IsServerClient: true,
 		}

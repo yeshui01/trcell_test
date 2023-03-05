@@ -32,7 +32,7 @@ func (frameNode *FrameNodeCellView) InitConnectServer() bool {
 				NodeDes:   fmt.Sprintf("%d_ETRNodeTypeCellView%d", frameNode.tframeObj.GetFrameConfig().ZoneID, frameNode.nodeIndex),
 			}
 			cb := func(okCode int32, msgData []byte, env *iframe.TRRemoteMsgEnv) {
-				loghlp.Infof("view register to cellroot callback suss:%d", okCode)
+				loghlp.Infof("view register to cellroot callback succ:%d", okCode)
 			}
 			frameNode.tframeObj.ForwardMessage(
 				protocol.EMsgClassFrame,
@@ -51,7 +51,7 @@ func (frameNode *FrameNodeCellView) InitConnectServer() bool {
 		userData := &iframe.SessionUserData{
 			DataType:       iframe.ESessionDataTypeNetInfo,
 			NodeType:       trnode.ETRNodeTypeCellRoot,
-			NodeIndex:      frameNode.nodeIndex,
+			NodeIndex:      int32(idx),
 			DesInfo:        fmt.Sprintf("%dETRNodeTypeCellRoot%d", frameNode.tframeObj.GetFrameConfig().ZoneID, idx),
 			IsServerClient: true,
 		}

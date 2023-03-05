@@ -1,0 +1,45 @@
+syntax = "proto3";
+package pbrpc;
+option go_package = "./pbrpc";
+
+// 获取一个序列号
+message LoginSeqNoReq {    
+    string AccountName = 1; // 账号名字
+}
+
+message LoginSeqNoRep {
+    int32 SeqNo = 1;        // 当前账号对应的排队序列号
+    int32 CurQueueNo = 2;   // 当前排队的序列号
+    int32 QueueNum = 3;     // 当前排队的数量
+}
+
+// 获取当前完成队列号
+message QueryCurLoginFinishNoReq {
+}
+
+message QueryCurLoginFinishNoRep {
+    int32 CurFinishNo = 2;   // 当前完成队列号
+}
+
+// 更新完成队列号
+message IncrementLoginFinishReq {
+    string AccountName = 1;
+}
+message IncrementLoginFinishRep {
+
+}
+
+// 获取当前排队数量
+message GetQueueNumReq {
+}
+message GetQueueNumRep {
+    int32 QueueNum = 1;
+}
+
+
+service LoginQueueBackend {
+    rpc GetLoginSeqNo(LoginSeqNoReq) returns (LoginSeqNoRep) {}
+    rpc GetFinishSeqNo(QueryCurLoginFinishNoReq) returns (QueryCurLoginFinishNoRep) {}
+    rpc IncrementLoginFinish(IncrementLoginFinishReq) returns (IncrementLoginFinishRep) {}
+    rpc GetQueueNum(GetQueueNumReq) returns (GetQueueNumRep) {}
+}

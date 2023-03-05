@@ -41,15 +41,21 @@ func GetFrameConfig() *tframeconfig.FrameConfig {
 func AfterMsgJob(doJob func()) {
 	frameCore.AfterMsgJob(doJob)
 }
+
 func GetCurNodeIndex() int32 {
 	return frameCore.curWorkNode.NodeIndex()
 }
+
 func GetCurPBNodeInfo() *pbserver.ServerNodeInfo {
 	return &pbserver.ServerNodeInfo{
 		ZoneID:    frameCore.GetFrameConfig().ZoneID,
 		NodeType:  frameCore.curWorkNode.NodeType(),
 		NodeIndex: frameCore.curWorkNode.NodeIndex(),
 	}
+}
+
+func GetCurNodeUid() int64 {
+	return trnode.GenNodeUid(frameCore.GetFrameConfig().ZoneID, frameCore.curWorkNode.NodeType(), frameCore.curWorkNode.NodeIndex())
 }
 
 // 注册用户层帧函数
@@ -90,10 +96,12 @@ func ForwardZoneMessage(msgClass int32, msgType int32, pbMsg protoreflect.ProtoM
 func PushZoneMessage(msgClass int32, msgType int32, pbMsg protoreflect.ProtoMessage, nodeTpye int32, nodeIndex int32) bool {
 	return frameCore.PushZoneMessage(msgClass, msgType, pbMsg, nodeTpye, nodeIndex)
 }
+
 func ForwardZoneClientPBMessage(msgClass int32, msgType int32, pbMsg proto.Message, nodeTpye int32, nodeIndex int32, cb iframe.MsgCallbackFunc, env *iframe.TRRemoteMsgEnv, roleID int64) bool {
 	msgData, _ := proto.Marshal(pbMsg)
 	return ForwardZoneClientMessage(msgClass, msgType, msgData, nodeTpye, nodeIndex, cb, env, roleID)
 }
+
 func ForwardZoneClientMessage(msgClass int32, msgType int32, msgData []byte, nodeTpye int32, nodeIndex int32, cb iframe.MsgCallbackFunc, env *iframe.TRRemoteMsgEnv, roleID int64) bool {
 	sendMsg := MakeInnerMsg(msgClass, msgType, msgData)
 	// 找到节点
@@ -154,4 +162,13 @@ func GetNodeListByType(nodeType int32) []trnode.ITRNodeEntity {
 // 当前系统时间,非即时时间
 func GetFrameSysNowTime() int64 {
 	return frameCore.nowFrameTimeMs / 1000
+}
+
+// 通用接口-发送消息到某个节点
+func ForwardNodeMessage(msgClass int32, msgType int32, msgData []byte, nodeUid int64, cb iframe.MsgCallbackFunc, env *iframe.TRRemoteMsgEnv) bool {
+	return frameCore.ForwardNodeMessageByNodeUid(msgClass, msgType, msgData, nodeUid, cb, env)
+}
+
+func SendReplyMessageData(okCode int32, repData []byte, env *iframe.TRRemoteMsgEnv) bool {
+	return frameCore.SendReplyMessageData(okCode, repData, env)
 }

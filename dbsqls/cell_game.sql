@@ -67,4 +67,14 @@ CREATE TABLE `role_extra`  (
   PRIMARY KEY (`role_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
+-- ----------------------------
+-- Table structure for cs_global
+-- ----------------------------
+DROP TABLE IF EXISTS `cs_global`;
+CREATE TABLE `cs_global` (
+  `id` int NOT NULL,
+  `open_time` bigint NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 SET FOREIGN_KEY_CHECKS = 1;

@@ -63,3 +63,19 @@ message EFrameMsgBroadcastMsgToClientReq
     int32 MsgClass = 3;
     bytes MsgData = 4;
 }
+
+// 转发消息
+// EFrameMsgTransMsg             int32 = 6 // 转发消息
+message EFrameMsgTransMsgReq
+{
+    int32 MsgClass = 1;
+    int32 MsgType = 2;
+    bytes MsgData = 3;
+    int64 FromNodeUID = 4;   // 消息源服务器
+    int64 DestNodeUID = 5;   // 消息目的服务器
+}
+
+message EFrameMsgTransMsgRep
+{
+
+}

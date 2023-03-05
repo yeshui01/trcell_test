@@ -45,6 +45,12 @@ func main() {
 	stopSig := make(chan os.Signal)
 	stopCh := make(chan bool)
 	signal.Notify(stopSig, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+	defer func() {
+		if errP := recover(); errP != nil {
+			loghlp.Errorf("gate panic:", errP)
+			return
+		}
+	}()
 	go func() {
 		<-stopSig
 		stopCh <- true
@@ -64,7 +70,7 @@ func main() {
 			frameCmd.UserCmd.GetCmdType(),
 			reflect.TypeOf(frameCmd.UserCmd.GetCmdData()).String(),
 		)
-		// 处理websocket命令
+		// 处理命令
 		servGate.HandleCommand(frameCmd)
 	})
 	trframe.RegisterUserFrameRun(func(curTimeMs int64) {

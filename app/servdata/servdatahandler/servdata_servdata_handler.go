@@ -9,6 +9,7 @@ package servdatahandler
 
 import (
 	"trcell/app/servdata/servdatamain"
+	"trcell/pkg/loghlp"
 	"trcell/pkg/ormdef"
 	"trcell/pkg/pb/pbserver"
 	"trcell/pkg/pb/pbtools"
@@ -54,8 +55,13 @@ func HandleESMsgServDataSaveTables(tmsgCtx *iframe.TMsgContext) (isok int32, ret
 				oneTable := tbobj.NewTbCsGlobal()
 				oneTable.FromBytes(v.Data)
 				// 发送到db线程更新
-				dbJob := func() {
-					gameDB.Model(oneTable.GetOrmMeta()).Select("*").Updates(oneTable.GetOrmMeta())
+				dbJob := func() bool {
+					errDB := gameDB.Model(oneTable.GetOrmMeta()).Select("*").Updates(oneTable.GetOrmMeta()).Error
+					if errDB != nil {
+						loghlp.Errorf("save table error:%s", errDB.Error())
+						return false
+					}
+					return true
 				}
 				dataGlobal.PostDBJob(&servdatamain.DataDBJob{
 					DoJob: dbJob,

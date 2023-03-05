@@ -84,9 +84,14 @@ cellSocialCfgs:
   
 
 ## 传输总线
+# 是否连接trans
+connectTrans: False
 # cellTrans
 cellTransCfgs:
     - listenAddr: ":17800"
       logLevel: 5
       #logPath: "./logs"
       csvPath: "./csv"
+      # trans节点自带一个zonid
+      zoneID: 10000
+      nodeIndex: 0

@@ -29,6 +29,8 @@ type TRRemoteMsgEnv struct {
 }
 
 type MsgCallbackFunc func(okCode int32, msgData []byte, env *TRRemoteMsgEnv)
+type MultiMsgCallbackFunc func(callInsHolder interface{}, env *TRRemoteMsgEnv)
+type MultiMsgStepCallbackFunc func(callInsHolder interface{}, okCode int32, msgData []byte, env *TRRemoteMsgEnv) bool
 
 type ITRFrame interface {
 	Run()
@@ -36,10 +38,13 @@ type ITRFrame interface {
 	GetFrameConfig() *tframeconfig.FrameConfig
 	ForwardMessage(msgClass int32, msgType int32, pbMsg protoreflect.ProtoMessage, nodeTpye int32, nodeIndex int32, cb MsgCallbackFunc, env *TRRemoteMsgEnv) bool
 	GetCurNodeType() int32
+	ForwardNodeMessageByNodeUid(msgClass int32, msgType int32, msgData []byte, nodeUid int64, cb MsgCallbackFunc, env *TRRemoteMsgEnv) bool
+	ForwardNodePBMessageByNodeUid(msgClass int32, msgType int32, pbMsg protoreflect.ProtoMessage, nodeUid int64, cb MsgCallbackFunc, env *TRRemoteMsgEnv) bool
 }
 
 // session数据
 type SessionUserData struct {
+	ZoneID         int32
 	DataType       int32
 	NodeType       int32
 	NodeIndex      int32
